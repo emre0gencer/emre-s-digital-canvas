@@ -4,6 +4,8 @@ import Section from "@/components/Common/Section";
 import TechBadge from "@/components/Common/TechBadge";
 import ProjectCard from "@/components/Projects/ProjectCard";
 import ExperienceCard from "@/components/Experience/ExperienceCard";
+import ParticleBackground from "@/components/Common/ParticleBackground";
+import SkillGlobe from "@/components/Common/SkillGlobe";
 import { projects } from "@/data/projects";
 import { experiences } from "@/data/experience";
 import { skills } from "@/data/skills";
@@ -17,13 +19,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section with Particle Background */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Animated Particle Background - Only in hero */}
+        <ParticleBackground />
+
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBackground})` }}
         />
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-up">
@@ -113,28 +118,39 @@ const Home = () => {
         </div>
       </Section>
 
-      {/* Skills Overview */}
+      {/* Skills Overview with Interactive Globe */}
       <Section className="bg-muted/30">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Skills & Technologies</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Technical expertise across software development, AI, and data analysis
+            Interactive visualization of my technical expertise
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {skills.map((skillCategory) => (
-            <Card key={skillCategory.category} className="hover:shadow-md transition-smooth">
-              <CardContent className="pt-6">
-                <h3 className="font-semibold text-lg mb-4 text-primary">{skillCategory.category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {skillCategory.skills.map((skill) => (
-                    <TechBadge key={skill}>{skill}</TechBadge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
+          {/* Skill Globe */}
+          <div className="flex-1 flex justify-center">
+            <SkillGlobe />
+          </div>
+
+          {/* Skills by Category */}
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skills.map((skillCategory) => (
+              <Card key={skillCategory.category} className="hover:shadow-md transition-smooth">
+                <CardContent className="pt-6">
+                  <h3 className="font-semibold text-lg mb-4 text-primary">{skillCategory.category}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {skillCategory.skills.slice(0, 5).map((skill) => (
+                      <TechBadge key={skill} className="text-xs">{skill}</TechBadge>
+                    ))}
+                    {skillCategory.skills.length > 5 && (
+                      <TechBadge className="text-xs">+{skillCategory.skills.length - 5}</TechBadge>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </Section>
 
