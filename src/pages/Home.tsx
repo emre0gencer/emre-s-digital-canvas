@@ -90,7 +90,7 @@ const Home = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem
-                    onClick={() => window.open('/resume.pdf', '_blank')}
+                    onClick={() => window.open(`${import.meta.env.BASE_URL}resume.pdf`, '_blank')}
                   >
                     <Eye className="mr-2 h-4 w-4" />
                     View on Browser
@@ -98,7 +98,7 @@ const Home = () => {
                   <DropdownMenuItem
                     onClick={() => {
                       const link = document.createElement('a');
-                      link.href = '/resume.pdf';
+                      link.href = `${import.meta.env.BASE_URL}resume.pdf`;
                       link.download = 'Emre_Gencer_Resume.pdf';
                       document.body.appendChild(link);
                       link.click();
@@ -111,7 +111,7 @@ const Home = () => {
                   <DropdownMenuItem
                     onClick={() => {
                       const link = document.createElement('a');
-                      link.href = '/resume.docx';
+                      link.href = `${import.meta.env.BASE_URL}resume.docx`;
                       link.download = 'Emre_Gencer_Resume.docx';
                       document.body.appendChild(link);
                       link.click();
