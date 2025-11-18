@@ -23,7 +23,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <CobwebHover />
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-1">
