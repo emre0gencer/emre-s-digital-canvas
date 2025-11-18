@@ -17,6 +17,8 @@ const CobwebHover: React.FC = () => {
   const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastMoveRef = useRef(0);
+  const lastPosRef = useRef({ x: 0, y: 0 });
+  const velocityRef = useRef({ vx: 0, vy: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -33,43 +35,82 @@ const CobwebHover: React.FC = () => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Halved intensity: fewer particles, smaller, shorter life, less connection
-    const spawnParticles = (x: number, y: number) => {
-      const count = 2 + Math.floor(Math.random() * 2); // 2-3
+    // Spawn particles based on acceleration intensity
+    const spawnParticles = (x: number, y: number, intensity: number) => {
+      // Scale particle count with intensity (1-8 particles)
+      const baseCount = 2;
+      const count = Math.min(8, Math.floor(baseCount + intensity * 6));
+      
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.3 + Math.random() * 1.1;
+        // Scale speed and size with intensity
+        const speed = (0.3 + Math.random() * 1.1) * (0.5 + intensity * 1.5);
+        const size = (0.7 + Math.random() * 1.2) * (0.8 + intensity * 0.7);
+        
         particlesRef.current.push({
           x,
           y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          life: 1.0, // start with 1.0, fade out in ~3.5s
-          size: 0.7 + Math.random() * 1.2,
+          life: 1.0,
+          size,
         });
       }
     };
 
     const onMove = (e: MouseEvent) => {
-      // throttle spawn to avoid overwhelming the scene
       const now = performance.now();
-      if (now - lastMoveRef.current < 10) return; // 10ms throttle (more frequent)
+      const dt = now - lastMoveRef.current;
+      
+      if (dt < 10) return; // 10ms throttle
+      
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      spawnParticles(x, y);
+      
+      // Calculate velocity and acceleration
+      const dx = x - lastPosRef.current.x;
+      const dy = y - lastPosRef.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const currentVelocity = distance / (dt || 1);
+      
+      // Smooth velocity calculation
+      velocityRef.current.vx = velocityRef.current.vx * 0.7 + currentVelocity * 0.3;
+      
+      // Normalize intensity (0 to 1, capped at reasonable speed)
+      const intensity = Math.min(1, velocityRef.current.vx / 20);
+      
+      spawnParticles(x, y, intensity);
+      
+      lastPosRef.current = { x, y };
       lastMoveRef.current = now;
     };
 
     // touch support
     const onTouch = (e: TouchEvent) => {
+      const now = performance.now();
+      const dt = now - lastMoveRef.current;
+      
       const rect = canvas.getBoundingClientRect();
       const t = e.touches[0];
       if (!t) return;
+      
       const x = t.clientX - rect.left;
       const y = t.clientY - rect.top;
-      spawnParticles(x, y);
-      lastMoveRef.current = performance.now();
+      
+      // Calculate velocity for touch
+      const dx = x - lastPosRef.current.x;
+      const dy = y - lastPosRef.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const currentVelocity = distance / (dt || 1);
+      
+      velocityRef.current.vx = velocityRef.current.vx * 0.7 + currentVelocity * 0.3;
+      const intensity = Math.min(1, velocityRef.current.vx / 20);
+      
+      spawnParticles(x, y, intensity);
+      
+      lastPosRef.current = { x, y };
+      lastMoveRef.current = now;
     };
 
     document.addEventListener("mousemove", onMove, { passive: true });
