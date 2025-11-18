@@ -10,6 +10,14 @@ import { projects } from "@/data/projects";
 import { experiences } from "@/data/experience";
 import { skills } from "@/data/skills";
 import { ArrowRight, Briefcase, GraduationCap, Code, Download } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-bg.jpg";
 
@@ -48,11 +56,53 @@ const Home = () => {
                   View Projects <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="/resume.pdf" download>
-                  <Download className="mr-2 h-4 w-4" /> Download Resume
-                </a>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="lg" variant="outline">
+                    <Download className="mr-2 h-4 w-4" /> Resume
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="start">
+                  <DropdownMenuLabel>Resume</DropdownMenuLabel>
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      // View PDF in browser
+                      window.open("/resume.pdf", "_blank");
+                    }}
+                  >
+                    View as PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      const a = document.createElement("a");
+                      a.href = "/resume.pdf";
+                      a.download = "Emre_Gencer_Resume.pdf";
+                      document.body.appendChild(a);
+                      a.click();
+                      a.remove();
+                    }}
+                  >
+                    Download as .pdf
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      const a = document.createElement("a");
+                      a.href = "/resume.docx";
+                      a.download = "Emre_Gencer_Resume.docx";
+                      document.body.appendChild(a);
+                      a.click();
+                      a.remove();
+                    }}
+                  >
+                    Download as .docx
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
