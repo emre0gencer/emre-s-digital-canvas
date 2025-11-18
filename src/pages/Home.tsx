@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Section from "@/components/Common/Section";
 import TechBadge from "@/components/Common/TechBadge";
 import ProjectCard from "@/components/Projects/ProjectCard";
@@ -9,35 +16,52 @@ import SkillGlobe from "@/components/Common/SkillGlobe";
 import { projects } from "@/data/projects";
 import { experiences } from "@/data/experience";
 import { skills } from "@/data/skills";
-import { ArrowRight, Briefcase, GraduationCap, Code, Download } from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+  ArrowRight,
+  Briefcase,
+  GraduationCap,
+  Code,
+  Download,
+  Eye,
+  FileText,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-bg.jpg";
 
 const Home = () => {
   const featuredProjects = projects.slice(0, 3);
-  const recentExperiences = experiences.filter(e => e.type === "work" || e.type === "research").slice(0, 2);
+  const recentExperiences = experiences
+    .filter((e) => e.type === "work" || e.type === "research")
+    .slice(0, 2);
+
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+
+  const toggleCategorySelection = (category: string) => {
+    setSelectedCategory((prev) => (prev === category ? null : category));
+  };
 
   return (
-    <div className="min-h-screen">
+    <div
+      className="
+        min-h-screen 
+        bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),transparent_55%),_radial-gradient(circle_at_bottom,_rgba(168,85,247,0.18),transparent_55%)]
+        bg-background
+        text-foreground
+      "
+    >
       {/* Hero Section with Particle Background */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Animated Particle Background - Only in hero */}
         <ParticleBackground />
 
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${heroBackground})` }}
         />
-        <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
-        
+        <div className="absolute inset-0 bg-background/90 backdrop-blur-[6px]" />
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-up">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
@@ -47,9 +71,11 @@ const Home = () => {
               Information Systems @ Carnegie Mellon University
             </p>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Sophomore building web applications and AI-driven products. Passionate about creating technology that makes a meaningful impact.
+              Sophomore building web applications and AI-driven products.
+              Passionate about creating technology that makes a meaningful
+              impact.
             </p>
-            
+
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Button asChild size="lg" className="shadow-glow">
                 <Link to="/projects">
@@ -62,43 +88,37 @@ const Home = () => {
                     <Download className="mr-2 h-4 w-4" /> Resume
                   </Button>
                 </DropdownMenuTrigger>
-
-                <DropdownMenuContent align="start">
-                  <DropdownMenuLabel>Resume</DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      // View PDF in browser
-                      window.open("/resume.pdf", "_blank");
-                    }}
+                    onClick={() => window.open('/resume.pdf', '_blank')}
                   >
-                    View as PDF
+                    <Eye className="mr-2 h-4 w-4" />
+                    View on Browser
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      const a = document.createElement("a");
-                      a.href = "/resume.pdf";
-                      a.download = "Emre_Gencer_Resume.pdf";
-                      document.body.appendChild(a);
-                      a.click();
-                      a.remove();
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/resume.pdf';
+                      link.download = 'Emre_Gencer_Resume.pdf';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
                     }}
                   >
+                    <Download className="mr-2 h-4 w-4" />
                     Download as .pdf
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      const a = document.createElement("a");
-                      a.href = "/resume.docx";
-                      a.download = "Emre_Gencer_Resume.docx";
-                      document.body.appendChild(a);
-                      a.click();
-                      a.remove();
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/resume.docx';
+                      link.download = 'Emre_Gencer_Resume.docx';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
                     }}
                   >
+                    <FileText className="mr-2 h-4 w-4" />
                     Download as .docx
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -109,40 +129,49 @@ const Home = () => {
       </section>
 
       {/* Quick Highlights */}
-      <Section className="bg-muted/30">
+      <Section className="bg-background/40 backdrop-blur-xl border-y border-border/40">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <Card className="border-primary/20 hover:border-primary/50 transition-smooth">
+          <Card className="border-primary/20 hover:border-primary/60 bg-background/60 backdrop-blur-sm transition-smooth">
             <CardContent className="pt-6 text-center">
               <GraduationCap className="h-10 w-10 mx-auto mb-4 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Sophomore @ CMU</h3>
-              <p className="text-sm text-muted-foreground">Information Systems | GPA 3.25</p>
+              <p className="text-sm text-muted-foreground">
+                Information Systems | GPA 3.25
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="border-accent/20 hover:border-accent/50 transition-smooth">
+          <Card className="border-accent/20 hover:border-accent/60 bg-background/60 backdrop-blur-sm transition-smooth">
             <CardContent className="pt-6 text-center">
               <Code className="h-10 w-10 mx-auto mb-4 text-accent" />
               <h3 className="font-semibold text-lg mb-2">Web & AI Projects</h3>
-              <p className="text-sm text-muted-foreground">Full-stack development with ML</p>
+              <p className="text-sm text-muted-foreground">
+                Full-stack development with ML
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20 hover:border-primary/50 transition-smooth">
+          <Card className="border-primary/20 hover:border-primary/60 bg-background/60 backdrop-blur-sm transition-smooth">
             <CardContent className="pt-6 text-center">
               <Briefcase className="h-10 w-10 mx-auto mb-4 text-primary" />
               <h3 className="font-semibold text-lg mb-2">Open to Internships</h3>
-              <p className="text-sm text-muted-foreground">Summer 2026 opportunities</p>
+              <p className="text-sm text-muted-foreground">
+                Summer 2026 opportunities
+              </p>
             </CardContent>
           </Card>
         </div>
       </Section>
 
       {/* Featured Projects */}
-      <Section id="projects">
+      <Section id="projects" className="bg-background/60 backdrop-blur-xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Projects</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Featured Projects
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A selection of my work in web development, AI, and social impact technology
+            A selection of my work in web development, AI, and social impact
+            technology
           </p>
         </div>
 
@@ -168,46 +197,114 @@ const Home = () => {
         </div>
       </Section>
 
-      {/* Skills Overview with Interactive Globe */}
-      <Section className="bg-muted/30">
+      {/* Skills Overview with Neural Network Visual */}
+      <Section className="bg-background/70 backdrop-blur-2xl border-y border-border/40">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Skills & Technologies</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Skills & Technologies
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Interactive visualization of my technical expertise
+            A neural-style map of the languages, tools, and frameworks I use.
           </p>
         </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
-          {/* Skill Globe */}
+          {/* Neural Network Visual */}
           <div className="flex-1 flex justify-center">
-            <SkillGlobe />
+            <SkillGlobe
+              hoveredCategory={hoveredCategory}
+              selectedCategory={selectedCategory}
+              onSkillHover={(name, category) => {
+                setHoveredSkill(name);
+                setHoveredCategory(category);
+              }}
+              onCategorySelect={(category) => {
+                if (!category) {
+                  setSelectedCategory(null);
+                } else {
+                  toggleCategorySelection(category);
+                }
+              }}
+            />
           </div>
 
-          {/* Skills by Category */}
+          {/* Skills by Category (Legend + details) */}
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {skills.map((skillCategory) => (
-              <Card key={skillCategory.category} className="hover:shadow-md transition-smooth">
-                <CardContent className="pt-6">
-                  <h3 className="font-semibold text-lg mb-4 text-primary">{skillCategory.category}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {skillCategory.skills.slice(0, 5).map((skill) => (
-                      <TechBadge key={skill} className="text-xs">{skill}</TechBadge>
-                    ))}
-                    {skillCategory.skills.length > 5 && (
-                      <TechBadge className="text-xs">+{skillCategory.skills.length - 5}</TechBadge>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {skills.map((skillCategory) => {
+              const isSelected = selectedCategory === skillCategory.category;
+              const isHovered = hoveredCategory === skillCategory.category;
+
+              return (
+                <Card
+                  key={skillCategory.category}
+                  className={`transition-smooth cursor-pointer bg-background/70 backdrop-blur-md ${
+                    isSelected
+                      ? "border-primary shadow-md"
+                      : isHovered
+                      ? "border-primary/60"
+                      : "hover:shadow-md border-border/60"
+                  }`}
+                  onMouseEnter={() =>
+                    setHoveredCategory(skillCategory.category)
+                  }
+                  onMouseLeave={() => {
+                    // Only clear hover if no node is currently hovered
+                    if (!hoveredSkill) {
+                      setHoveredCategory(null);
+                    }
+                  }}
+                  onClick={() => toggleCategorySelection(skillCategory.category)}
+                >
+                  <CardContent className="pt-6">
+                    <h3 className="font-semibold text-lg mb-4 text-primary">
+                      {skillCategory.category}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {skillCategory.skills.slice(0, 5).map((skill) => {
+                        const isExact = hoveredSkill === skill;
+                        const isSameCategoryActive =
+                          hoveredCategory === skillCategory.category ||
+                          selectedCategory === skillCategory.category;
+
+                        let badgeClasses = "text-xs";
+                        if (isExact) {
+                          // exact skill hovered from network -> strong highlight
+                          badgeClasses +=
+                            " bg-primary/90 text-primary-foreground border border-primary shadow-sm";
+                        } else if (isSameCategoryActive) {
+                          // same category as hovered/selected -> softer highlight
+                          badgeClasses +=
+                            " bg-primary/10 text-primary border border-primary/40";
+                        } else {
+                          badgeClasses += " bg-muted text-muted-foreground";
+                        }
+
+                        return (
+                          <TechBadge key={skill} className={badgeClasses}>
+                            {skill}
+                          </TechBadge>
+                        );
+                      })}
+                      {skillCategory.skills.length > 5 && (
+                        <TechBadge className="text-xs bg-muted text-muted-foreground">
+                          +{skillCategory.skills.length - 5}
+                        </TechBadge>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </Section>
 
       {/* Recent Experience */}
-      <Section id="experience">
+      <Section id="experience" className="bg-background/60 backdrop-blur-xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Recent Experience</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Recent Experience
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Professional work and research in machine learning and data analysis
           </p>
@@ -237,17 +334,31 @@ const Home = () => {
       </Section>
 
       {/* Courses Preview */}
-      <Section className="bg-muted/30">
+      <Section className="bg-background/50 backdrop-blur-xl border-y border-border/40">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Continuous Learning</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Continuous Learning
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Expanding knowledge through coursework and certifications
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-8">
-          {["Harvard CS50x", "Machine Learning", "Computer Vision", "Blockchain", "Research Skills", "Statistical Methods", "Java Programming", "Quantum Physics"].map((course) => (
-            <Card key={course} className="hover:border-primary/50 transition-fast">
+          {[
+            "Harvard CS50x",
+            "Machine Learning",
+            "Computer Vision",
+            "Blockchain",
+            "Research Skills",
+            "Statistical Methods",
+            "Java Programming",
+            "Quantum Physics",
+          ].map((course) => (
+            <Card
+              key={course}
+              className="bg-background/70 backdrop-blur-md hover:border-primary/50 transition-fast"
+            >
               <CardContent className="pt-4 pb-4 text-center">
                 <p className="text-sm font-medium">{course}</p>
               </CardContent>
@@ -265,12 +376,15 @@ const Home = () => {
       </Section>
 
       {/* Contact Strip */}
-      <Section>
-        <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
+      <Section className="bg-transparent">
+        <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20 backdrop-blur-xl">
           <CardContent className="pt-12 pb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Let's Work Together</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Let&apos;s Work Together
+            </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              I'm open to summer 2026 internships, collaborations, and interesting projects. Let's connect!
+              I&apos;m open to summer 2026 internships, collaborations, and
+              interesting projects. Let&apos;s connect!
             </p>
             <Button asChild size="lg" className="shadow-glow">
               <Link to="/contact">
