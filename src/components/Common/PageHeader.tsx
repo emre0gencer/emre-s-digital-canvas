@@ -9,7 +9,7 @@ interface PageHeaderProps {
 const PageHeader = ({ title, subtitle, className }: PageHeaderProps) => {
   return (
     <div className={cn("text-center mb-16 md:mb-20 animate-fade-up", className)}>
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent leading-normal pb-2">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent leading-relaxed pb-4">
         {title}
       </h1>
       {subtitle && (
