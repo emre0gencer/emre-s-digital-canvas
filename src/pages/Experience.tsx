@@ -94,12 +94,12 @@ const Experience = () => {
           </>
         ) : (
           <div className="animate-fade-in">
-            {selectedType !== "all" && (
-              <p className="text-center text-sm text-muted-foreground mb-8">
-                Showing all experiences in timeline view
-              </p>
+            <ExperienceTimeline experiences={filteredExperiences} />
+            {filteredExperiences.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No experiences found in this category.</p>
+              </div>
             )}
-            <ExperienceTimeline />
           </div>
         )}
       </Section>

@@ -52,7 +52,7 @@ const ProjectCard = ({
               <Link to={`/projects/${slug}`}>View Details</Link>
             </Button>
           )}
-          {githubUrl && (
+          {githubUrl && category !== "Community Impact" && category !== "Hackathon" && (
             <Button asChild variant="outline" size="icon">
               <a href={githubUrl} target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4" />

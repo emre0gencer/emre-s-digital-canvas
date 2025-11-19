@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TechBadge from "@/components/Common/TechBadge";
-import { projects } from "@/data/projects";
+import { Project } from "@/data/projects";
 import { ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -47,7 +47,11 @@ const AnimatedCounter = ({ value, label }: AnimatedCounterProps) => {
   );
 };
 
-const ProjectTimeline = () => {
+interface ProjectTimelineProps {
+  projects: Project[];
+}
+
+const ProjectTimeline = ({ projects }: ProjectTimelineProps) => {
   const [visibleIndexes, setVisibleIndexes] = useState<Set<number>>(new Set());
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -94,12 +98,8 @@ const ProjectTimeline = () => {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              {/* Alternating layout for desktop */}
-              <div
-                className={`md:col-span-1 flex items-center justify-center ${
-                  index % 2 === 0 ? "md:order-2" : "md:order-1"
-                }`}
-              >
+              {/* Left side: Project Card (always on the left) */}
+              <div className="md:col-span-1 flex items-center justify-center">
                 <div className="relative w-full">
                   {/* Timeline dot */}
                   <div className="hidden md:block absolute right-0 top-1/2 w-4 h-4 bg-primary rounded-full border-4 border-background shadow-lg -translate-y-1/2 translate-x-1/2" />
@@ -163,13 +163,95 @@ const ProjectTimeline = () => {
                 </div>
               </div>
 
-              {/* Impact/Stats for mobile */}
-              <div className="md:hidden flex items-center justify-center">
-                {project.impact && (
-                  <div className="text-center p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                    <p className="text-sm font-semibold text-primary">{project.impact}</p>
-                  </div>
-                )}
+              {/* Right side: URL Button (always on the right) */}
+              <div className="md:col-span-1 flex items-center justify-center">
+                <div className="w-full flex justify-center">
+                  {(project.id === "duquesne-incline" || project.id === "currency-converter") && project.githubUrl && project.liveUrl ? (
+                    <div className="flex gap-2 w-full max-w-xs">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Github className="h-5 w-5" />
+                          GitHub
+                        </a>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <ExternalLink className="h-5 w-5" />
+                          {project.id === "currency-converter" ? "PDF" : "Live"}
+                        </a>
+                      </Button>
+                    </div>
+                  ) : project.githubUrl && project.category !== "Community Impact" && project.category !== "Hackathon" ? (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                    >
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <Github className="h-5 w-5" />
+                        GitHub
+                      </a>
+                    </Button>
+                  ) : project.liveUrl ? (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                    >
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        Details
+                      </a>
+                    </Button>
+                  ) : project.details ? (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                    >
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        Details
+                      </Link>
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </div>
           ))}

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TechBadge from "@/components/Common/TechBadge";
-import { experiences } from "@/data/experience";
+import { Experience } from "@/data/experience";
 import { Briefcase, BookOpen, Award, Eye, Download } from "lucide-react";
 
 const getExperienceIcon = (type: string) => {
@@ -41,10 +41,14 @@ const getTimelineColor = (type: string) => {
       return "bg-green-500";
     default:
       return "bg-primary";
-  }
+  };
 };
 
-const ExperienceTimeline = () => {
+interface ExperienceTimelineProps {
+  experiences: Experience[];
+}
+
+const ExperienceTimeline = ({ experiences }: ExperienceTimelineProps) => {
   const [visibleIndexes, setVisibleIndexes] = useState<Set<number>>(new Set());
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -75,22 +79,6 @@ const ExperienceTimeline = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Legend */}
-      <div className="grid grid-cols-3 gap-4 mb-12 text-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-primary"></div>
-          <p className="text-xs font-semibold text-foreground">Work</p>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-accent"></div>
-          <p className="text-xs font-semibold text-foreground">Research</p>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          <p className="text-xs font-semibold text-foreground">Education</p>
-        </div>
-      </div>
-
       {/* Timeline Container */}
       <div className="relative">
         {/* Vertical line */}
@@ -99,7 +87,6 @@ const ExperienceTimeline = () => {
         {/* Timeline items */}
         <div className="space-y-6 md:space-y-12">
           {sortedExperiences.map((experience, index) => {
-            const isEven = index % 2 === 0;
             const isVisible = visibleIndexes.has(index);
 
             return (
@@ -108,21 +95,21 @@ const ExperienceTimeline = () => {
                 ref={(el) => {
                   itemRefs.current[index] = el;
                 }}
-                className={`md:grid md:grid-cols-2 gap-8 items-center transition-all duration-700 ${
-                  isVisible ? "opacity-100 translate-x-0" : `opacity-0 ${isEven ? "-translate-x-8" : "translate-x-8"}`
+                className={`md:grid md:grid-cols-2 gap-8 transition-all duration-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
               >
-                {/* Content */}
-                <div
-                  className={`flex flex-col gap-4 ${
-                    isEven ? "md:order-1" : "md:order-2"
-                  }`}
-                >
-                  <Card
-                    className={`h-full border-2 ${getExperienceColor(experience.type)} hover:shadow-lg transition-smooth group bg-gradient-to-br from-card to-muted/20`}
-                  >
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-3">
+                {/* Left side: Experience Card (always on the left) */}
+                <div className="md:col-span-1 flex items-center justify-center">
+                  <div className="relative w-full">
+                    {/* Timeline dot */}
+                    <div className={`hidden md:block absolute right-0 top-1/2 w-4 h-4 rounded-full ${getTimelineColor(experience.type)} border-4 border-background shadow-lg -translate-y-1/2 translate-x-1/2`} />
+                    <div className={`hidden md:block absolute right-0 top-1/2 w-4 h-4 rounded-full ${getTimelineColor(experience.type)} border-4 border-background shadow-lg -translate-y-1/2 translate-x-1/2`} />
+
+                    <Card
+                      className={`h-full border-2 ${getExperienceColor(experience.type)} hover:shadow-lg transition-smooth group bg-gradient-to-br from-card to-muted/20`}
+                    >
+                      <CardHeader>
                         <div className="flex items-start gap-3 flex-1">
                           <div className={`p-2 rounded-lg bg-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"}/10 text-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"} group-hover:scale-110 transition-transform`}>
                             {getExperienceIcon(experience.type)}
@@ -136,72 +123,125 @@ const ExperienceTimeline = () => {
                             </CardDescription>
                           </div>
                         </div>
-                        
-                        {/* Attachment Buttons */}
-                        {experience.attachments && (experience.attachments.pdf || experience.attachments.pptx) && (
-                          <div className="flex flex-col gap-2">
-                            {experience.attachments.pdf && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="gap-2"
-                                onClick={() => window.open(experience.attachments!.pdf, '_blank')}
-                              >
-                                <Eye className="h-4 w-4" />
-                                Preview
-                              </Button>
-                            )}
-                            {experience.attachments.pptx && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="gap-2"
-                                onClick={() => {
-                                  const link = document.createElement('a');
-                                  link.href = experience.attachments!.pptx!;
-                                  link.download = `${experience.organization.replace(/\s+/g, '_')}_${experience.role.replace(/\s+/g, '_')}.pptx`;
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
-                                }}
-                              >
-                                <Download className="h-4 w-4" />
-                                Download
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </CardHeader>
+                      </CardHeader>
 
-                    <CardContent className="space-y-4">
-                      {/* Date range */}
-                      <p className="text-sm text-muted-foreground">
-                        {experience.date}
-                      </p>
-
-                      {/* Location */}
-                      {experience.location && (
+                      <CardContent className="space-y-4">
+                        {/* Date range */}
                         <p className="text-sm text-muted-foreground">
-                          📍 {experience.location}
+                          {experience.date}
                         </p>
-                      )}
 
-                      {/* Description */}
-                      <div className="space-y-2">
-                        {experience.description.map((desc, idx) => (
-                          <p key={idx} className="text-sm text-foreground leading-relaxed">
-                            • {desc}
+                        {/* Location */}
+                        {experience.location && (
+                          <p className="text-sm text-muted-foreground">
+                            📍 {experience.location}
                           </p>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                        )}
+
+                        {/* Description */}
+                        <div className="space-y-2">
+                          {experience.description.map((desc, idx) => (
+                            <p key={idx} className="text-sm text-foreground leading-relaxed">
+                              • {desc}
+                            </p>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
 
-                {/* Timeline dot and connector */}
-                <div className="hidden md:flex items-center justify-center">
-                  <div className={`relative w-6 h-6 rounded-full ${getTimelineColor(experience.type)} border-4 border-background shadow-lg`} />
+                {/* Right side: URL Buttons (always on the right) */}
+                <div className="md:col-span-1 flex items-center justify-center">
+                  <div className="w-full flex justify-center">
+                    {experience.id === "cerrahpasa" && experience.url1 ? (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={experience.url1}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Eye className="h-5 w-5" />
+                          View Journal Article
+                        </a>
+                      </Button>
+                    ) : (experience.id === "mastercard" || experience.id === "salesforce") && experience.url1 ? (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={experience.url1}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Eye className="h-5 w-5" />
+                          See Report
+                        </a>
+                      </Button>
+                    ) : experience.id === "rcec" && experience.url1 ? (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="w-full max-w-xs bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={experience.url1}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Eye className="h-5 w-5" />
+                          See Technical Report
+                        </a>
+                      </Button>
+                    ) : experience.url1 && experience.url2 ? (
+                      <div className="flex gap-2 w-full max-w-xs">
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                        >
+                          <a
+                            href={experience.url1}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <Eye className="h-5 w-5" />
+                            View
+                          </a>
+                        </Button>
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                        >
+                          <a
+                            href={experience.url2}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <Download className="h-5 w-5" />
+                            Download
+                          </a>
+                        </Button>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             );

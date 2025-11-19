@@ -33,60 +33,23 @@ const ExperienceCard = ({
   return (
     <Card className={`border-l-4 ${typeColors[type]} hover:shadow-md transition-smooth`}>
       <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <CardTitle className="text-xl">{role}</CardTitle>
-            <CardDescription className="text-base font-medium text-foreground">
-              {organization}
-            </CardDescription>
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-2">
-              {location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  {location}
-                </span>
-              )}
+        <div className="flex-1">
+          <CardTitle className="text-xl">{role}</CardTitle>
+          <CardDescription className="text-base font-medium text-foreground">
+            {organization}
+          </CardDescription>
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-2">
+            {location && (
               <span className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                {date}
+                <MapPin className="h-4 w-4" />
+                {location}
               </span>
-            </div>
+            )}
+            <span className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              {date}
+            </span>
           </div>
-          
-          {/* Attachment Buttons */}
-          {attachments && (attachments.pdf || attachments.pptx) && (
-            <div className="flex flex-col gap-2">
-              {attachments.pdf && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => window.open(attachments.pdf, '_blank')}
-                >
-                  <Eye className="h-4 w-4" />
-                  Preview
-                </Button>
-              )}
-              {attachments.pptx && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => {
-                    const link = document.createElement('a');
-                    link.href = attachments.pptx!;
-                    link.download = `${organization.replace(/\s+/g, '_')}_${role.replace(/\s+/g, '_')}.pptx`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }}
-                >
-                  <Download className="h-4 w-4" />
-                  Download
-                </Button>
-              )}
-            </div>
-          )}
         </div>
       </CardHeader>
 

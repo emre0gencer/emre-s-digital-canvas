@@ -9,13 +9,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [viewMode, setViewMode] = useState<"grid" | "timeline">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "timeline">("timeline");
   const categories = getProjectCategories();
 
   const filteredProjects =
     selectedCategory === "All"
       ? projects
-      : projects.filter((p) => p.category === selectedCategory);
+      : projects.filter((p) => 
+          p.categories 
+            ? p.categories.includes(selectedCategory)
+            : p.category === selectedCategory
+        );
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -77,12 +81,12 @@ const Projects = () => {
           </>
         ) : (
           <div className="animate-fade-in">
-            {selectedCategory !== "All" && (
-              <p className="text-center text-sm text-muted-foreground mb-8">
-                Showing all projects in timeline view
-              </p>
+            <ProjectTimeline projects={filteredProjects} />
+            {filteredProjects.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No projects found in this category.</p>
+              </div>
             )}
-            <ProjectTimeline />
           </div>
         )}
       </Section>
