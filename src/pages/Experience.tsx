@@ -81,6 +81,7 @@ const Experience = () => {
                   date={exp.date}
                   description={exp.description}
                   type={exp.type}
+                  attachments={exp.attachments}
                 />
               ))}
             </div>

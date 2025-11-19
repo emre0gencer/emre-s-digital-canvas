@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import TechBadge from "@/components/Common/TechBadge";
 import { experiences } from "@/data/experience";
-import { Briefcase, BookOpen, Award } from "lucide-react";
+import { Briefcase, BookOpen, Award, Eye, Download } from "lucide-react";
 
 const getExperienceIcon = (type: string) => {
   switch (type) {
@@ -135,6 +136,41 @@ const ExperienceTimeline = () => {
                             </CardDescription>
                           </div>
                         </div>
+                        
+                        {/* Attachment Buttons */}
+                        {experience.attachments && (experience.attachments.pdf || experience.attachments.pptx) && (
+                          <div className="flex flex-col gap-2">
+                            {experience.attachments.pdf && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="gap-2"
+                                onClick={() => window.open(experience.attachments!.pdf, '_blank')}
+                              >
+                                <Eye className="h-4 w-4" />
+                                Preview
+                              </Button>
+                            )}
+                            {experience.attachments.pptx && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="gap-2"
+                                onClick={() => {
+                                  const link = document.createElement('a');
+                                  link.href = experience.attachments!.pptx!;
+                                  link.download = `${experience.organization.replace(/\s+/g, '_')}_${experience.role.replace(/\s+/g, '_')}.pptx`;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                }}
+                              >
+                                <Download className="h-4 w-4" />
+                                Download
+                              </Button>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </CardHeader>
 

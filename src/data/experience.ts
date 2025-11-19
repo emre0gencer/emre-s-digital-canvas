@@ -6,6 +6,10 @@ export interface Experience {
   date: string;
   type: "work" | "research" | "volunteer";
   description: string[];
+  attachments?: {
+    pdf?: string;
+    pptx?: string;
+  };
 }
 
 export const experiences: Experience[] = [
@@ -22,6 +26,10 @@ export const experiences: Experience[] = [
       "Assessed alignment with UN Sustainable Development Goals and corporate responsibility initiatives",
       "Gained hands-on experience with production ML systems at enterprise scale",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/mastercard.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/mastercard.pptx`,
+    },
   },
   {
     id: "salesforce",
@@ -36,6 +44,10 @@ export const experiences: Experience[] = [
       "Examined application of AI tools for marketing campaign optimization",
       "Evaluated diversity, inclusion, and social responsibility initiatives",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/salesforce.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/salesforce.pptx`,
+    },
   },
   {
     id: "cerrahpasa",
@@ -51,6 +63,10 @@ export const experiences: Experience[] = [
       "Mentored by Oxford Tutor Joseph Young throughout research process",
       "Published in Journal of Next Frontier for Life Sciences and AI (2023, Volume 6, Issue 2)",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/cerrahpasa.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/cerrahpasa.pptx`,
+    },
   },
   {
     id: "bogazici",
@@ -65,6 +81,10 @@ export const experiences: Experience[] = [
       "Explored practical benefits of cloud computing in data analytics context",
       "Supervised by Prof. Dr. Tuna Tugcu",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/bogazici.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/bogazici.pptx`,
+    },
   },
   {
     id: "rcec",
@@ -79,6 +99,10 @@ export const experiences: Experience[] = [
       "Completed Technical Report Document and passed first competition stage",
       "Worked on electronic differential systems, steering systems, and electric motor integration",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/rcec.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/rcec.pptx`,
+    },
   },
   {
     id: "english-tutoring",
@@ -93,6 +117,10 @@ export const experiences: Experience[] = [
       "Prepared educational slides to enhance learning experience",
       "Supported young students in their first foreign language journey",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/english-tutoring.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/english-tutoring.pptx`,
+    },
   },
   {
     id: "stem-tutoring",
@@ -107,5 +135,9 @@ export const experiences: Experience[] = [
       "Prepared educational slides aligned with science curriculum",
       "Ensured all experiment equipment was delivered to students",
     ],
+    attachments: {
+      pdf: `${import.meta.env.BASE_URL}experiences/stem-tutoring.pdf`,
+      pptx: `${import.meta.env.BASE_URL}experiences/stem-tutoring.pptx`,
+    },
   },
 ];

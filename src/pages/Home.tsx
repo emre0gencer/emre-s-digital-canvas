@@ -320,6 +320,7 @@ const Home = () => {
               date={exp.date}
               description={exp.description.slice(0, 3)}
               type={exp.type}
+              attachments={exp.attachments}
             />
           ))}
         </div>
