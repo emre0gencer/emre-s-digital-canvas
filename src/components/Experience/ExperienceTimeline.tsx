@@ -110,40 +110,45 @@ const ExperienceTimeline = ({ experiences }: ExperienceTimelineProps) => {
                       className={`h-full border-2 ${getExperienceColor(experience.type)} hover:shadow-lg transition-smooth group bg-gradient-to-br from-card to-muted/20`}
                     >
                       <CardHeader>
-                        <div className="flex items-start gap-3 flex-1">
-                          <div className={`p-2 rounded-lg bg-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"}/10 text-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"} group-hover:scale-110 transition-transform`}>
-                            {getExperienceIcon(experience.type)}
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className={`p-2 rounded-lg bg-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"}/10 text-${experience.type === "work" ? "primary" : experience.type === "research" ? "accent" : "green-500"} group-hover:scale-110 transition-transform`}>
+                              {getExperienceIcon(experience.type)}
+                            </div>
+                            <div className="flex-1">
+                              <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                                {experience.role}
+                              </CardTitle>
+                              <CardDescription className="text-base font-medium mt-1">
+                                {experience.organization}
+                              </CardDescription>
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                              {experience.role}
-                            </CardTitle>
-                            <CardDescription className="text-base font-medium mt-1">
-                              {experience.organization}
-                            </CardDescription>
-                          </div>
+                          <TechBadge variant="outline" className="shrink-0">
+                            {experience.date}
+                          </TechBadge>
                         </div>
-                      </CardHeader>
-
-                      <CardContent className="space-y-4">
-                        {/* Date range */}
-                        <p className="text-sm text-muted-foreground">
-                          {experience.date}
-                        </p>
-
-                        {/* Location */}
                         {experience.location && (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground ml-11">
                             📍 {experience.location}
                           </p>
                         )}
+                      </CardHeader>
 
+                      <CardContent className="space-y-4">
                         {/* Description */}
                         <div className="space-y-2">
                           {experience.description.map((desc, idx) => (
                             <p key={idx} className="text-sm text-foreground leading-relaxed">
                               • {desc}
                             </p>
+                          ))}
+                        </div>
+
+                        {/* Skills */}
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {experience.skills.map((skill) => (
+                            <TechBadge key={skill}>{skill}</TechBadge>
                           ))}
                         </div>
                       </CardContent>

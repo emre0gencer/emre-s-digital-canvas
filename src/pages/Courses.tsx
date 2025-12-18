@@ -3,16 +3,41 @@ import { Button } from "@/components/ui/button";
 import Section from "@/components/Common/Section";
 import PageHeader from "@/components/Common/PageHeader";
 import CourseCard from "@/components/Courses/CourseCard";
-import { courses, getCourseCategories } from "@/data/courses";
+import { courses } from "@/data/courses";
 
 const Courses = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const categories = getCourseCategories();
+  
+  // Define 5 main categories that best distinguish courses
+  const mainCategories = [
+    "All",
+    "Programming",
+    "AI & Machine Learning",
+    "Data Science",
+    "Distributed Systems",
+    "Research Methods"
+  ];
+
+  // Map courses to main categories
+  const getCourseMainCategory = (course: typeof courses[0]): string[] => {
+    const categoryMap: { [key: string]: string } = {
+      "cs50": "Programming",
+      "ml-course": "AI & Machine Learning",
+      "cv-course": "AI & Machine Learning",
+      "blockchain": "Distributed Systems",
+      "whisper-hackathon": "AI & Machine Learning",
+      "research-skills": "Research Methods",
+      "stats": "Data Science",
+      "java-duke": "Programming",
+      "mechanics": "Research Methods",
+    };
+    return [categoryMap[course.id]];
+  };
 
   const filteredCourses =
     selectedCategory === "All"
       ? courses
-      : courses.filter((course) => course.categories.includes(selectedCategory));
+      : courses.filter((course) => getCourseMainCategory(course).includes(selectedCategory));
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -24,7 +49,7 @@ const Courses = () => {
 
         {/* Filter Bar */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((category) => (
+          {mainCategories.map((category) => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
@@ -37,7 +62,7 @@ const Courses = () => {
         </div>
 
         {/* Courses Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in items-stretch">
           {filteredCourses.map((course) => (
             <CourseCard
               key={course.id}
@@ -47,6 +72,7 @@ const Courses = () => {
               description={course.description}
               categories={course.categories}
               certified={course.certified}
+              certificateUrl={course.certificateUrl}
             />
           ))}
         </div>

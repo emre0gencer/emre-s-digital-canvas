@@ -6,6 +6,7 @@ export interface Experience {
   date: string;
   type: "work" | "research" | "volunteer";
   description: string[];
+  skills: string[];
   url1?: string;
   url2?: string;
   attachments?: {
@@ -29,6 +30,15 @@ export const experiences: Experience[] = [
       "Assessed alignment with UN Sustainable Development Goals and corporate responsibility initiatives",
       "Gained hands-on experience with production ML systems at enterprise scale",
     ],
+    skills: [
+    "Python",
+    "SQL",
+    "Pandas",
+    "NumPy",
+    "scikit-learn",
+    "Statistical Modeling",
+    ],
+
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/mastercard.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/mastercard.pptx`,
@@ -48,6 +58,16 @@ export const experiences: Experience[] = [
       "Examined application of AI tools for marketing campaign optimization",
       "Evaluated diversity, inclusion, and social responsibility initiatives",
     ],
+    skills: [
+      "Exploratory Data Analysis (EDA)",
+      "Statistical Modeling",
+      "Data Visualization",
+      "A/B Testing Concepts",
+      "Business Intelligence",
+      "SPSS",
+      "AI-Assisted Analytics"
+    ],
+
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/salesforce.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/salesforce.pptx`,
@@ -68,27 +88,10 @@ export const experiences: Experience[] = [
       "Mentored by Oxford Tutor Joseph Young throughout research process",
       "Published in Journal of Next Frontier for Life Sciences and AI (2023, Volume 6, Issue 2)",
     ],
+    skills: ["Computer Vision", "CNNs", "Vision Transformers", "Machine Learning", "Research Methods"],
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/cerrahpasa.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/cerrahpasa.pptx`,
-    },
-  },
-  {
-    id: "bogazici",
-    role: "Researcher",
-    organization: "Bogazici University",
-    location: "Istanbul",
-    date: "Nov 2023 - Jan 2024",
-    type: "research",
-    description: [
-      "Investigated cloud computing applications in big data analytics",
-      "Researched scalability, cost-efficiency, and emerging cloud trends",
-      "Explored practical benefits of cloud computing in data analytics context",
-      "Supervised by Prof. Dr. Tuna Tugcu",
-    ],
-    attachments: {
-      pdf: `${import.meta.env.BASE_URL}experiences/bogazici.pdf`,
-      pptx: `${import.meta.env.BASE_URL}experiences/bogazici.pptx`,
     },
   },
   {
@@ -105,6 +108,7 @@ export const experiences: Experience[] = [
       "Completed Technical Report Document and passed first competition stage",
       "Worked on electronic differential systems, steering systems, and electric motor integration",
     ],
+    skills: ["Leadership", "Team Management", "Embedded Systems", "Electronics"],
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/rcec.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/rcec.pptx`,
@@ -123,6 +127,7 @@ export const experiences: Experience[] = [
       "Prepared educational slides to enhance learning experience",
       "Supported young students in their first foreign language journey",
     ],
+    skills: ["Tutoring"],
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/english-tutoring.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/english-tutoring.pptx`,
@@ -141,6 +146,7 @@ export const experiences: Experience[] = [
       "Prepared educational slides aligned with science curriculum",
       "Ensured all experiment equipment was delivered to students",
     ],
+    skills: ["Tutoring"],
     attachments: {
       pdf: `${import.meta.env.BASE_URL}experiences/stem-tutoring.pdf`,
       pptx: `${import.meta.env.BASE_URL}experiences/stem-tutoring.pptx`,

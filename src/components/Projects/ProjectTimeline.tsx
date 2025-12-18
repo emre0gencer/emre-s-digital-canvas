@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TechBadge from "@/components/Common/TechBadge";
 import { Project } from "@/data/projects";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -166,7 +166,43 @@ const ProjectTimeline = ({ projects }: ProjectTimelineProps) => {
               {/* Right side: URL Button (always on the right) */}
               <div className="md:col-span-1 flex items-center justify-center">
                 <div className="w-full flex justify-center">
-                  {(project.id === "duquesne-incline" || project.id === "currency-converter") && project.githubUrl && project.liveUrl ? (
+                  {/* Hackathon projects: Details + View Awards */}
+                  {project.category === "Hackathon" && project.liveUrl && project.awardsUrl ? (
+                    <div className="flex gap-2 w-full max-w-xs">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <ExternalLink className="h-5 w-5" />
+                          Details
+                        </a>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 bg-transparent border-primary text-primary hover:bg-primary/10"
+                      >
+                        <a
+                          href={project.awardsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Award className="h-5 w-5" />
+                          View Awards
+                        </a>
+                      </Button>
+                    </div>
+                  ) : (project.id === "duquesne-incline" || project.id === "currency-converter") && project.githubUrl && project.liveUrl ? (
                     <div className="flex gap-2 w-full max-w-xs">
                       <Button
                         asChild

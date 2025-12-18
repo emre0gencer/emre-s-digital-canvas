@@ -21,7 +21,7 @@ const Education = () => {
         />
 
         {/* Carnegie Mellon University */}
-        <Card className="mb-8 border-primary/30 shadow-md animate-fade-up">
+        <Card className="mb-8 shadow-md animate-fade-up hover:border-primary transition-colors">
           <CardHeader>
             <div className="flex items-start gap-4">
               <div className="p-3 bg-primary/10 rounded-lg">
@@ -100,7 +100,7 @@ const Education = () => {
         </Card>
 
         {/* Robert College */}
-        <Card className="mb-8 animate-fade-up">
+        <Card className="mb-8 animate-fade-up hover:border-primary transition-colors">
           <CardHeader>
             <div className="flex items-start gap-4">
               <div className="p-3 bg-muted rounded-lg">
@@ -126,7 +126,7 @@ const Education = () => {
         </Card>
 
         {/* Honors & Test Scores */}
-        <Card className="animate-fade-up">
+        <Card className="animate-fade-up hover:border-primary transition-colors">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Award className="h-6 w-6 text-accent" />
@@ -180,7 +180,7 @@ const Education = () => {
                     <p className="font-medium mb-1">Languages</p>
                     <div className="flex flex-wrap gap-2 mt-2">
                       <TechBadge>Turkish (Native)</TechBadge>
-                      <TechBadge>English (C1)</TechBadge>
+                      <TechBadge>English (C2)</TechBadge>
                       <TechBadge>German (B1)</TechBadge>
                     </div>
                   </div>

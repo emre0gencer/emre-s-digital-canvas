@@ -80,6 +80,7 @@ const Experience = () => {
                   location={exp.location}
                   date={exp.date}
                   description={exp.description}
+                  skills={exp.skills}
                   type={exp.type}
                   attachments={exp.attachments}
                 />

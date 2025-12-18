@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroBackground from "@/assets/hero-bg.jpg";
+import profilePhoto from "@/assets/profile-photo.jpg";
 
 const Home = () => {
   const featuredProjects = projects.slice(0, 3);
@@ -64,6 +65,17 @@ const Home = () => {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-up">
+            {/* Profile Photo */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-80 h-80 md:w-96 md:h-96 rounded-full border-4 border-primary/30 shadow-lg overflow-hidden">
+                <img 
+                  src={profilePhoto} 
+                  alt="Emre Gencer" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
               Emre Gencer
             </h1>
@@ -319,6 +331,7 @@ const Home = () => {
               location={exp.location}
               date={exp.date}
               description={exp.description.slice(0, 3)}
+              skills={exp.skills}
               type={exp.type}
               attachments={exp.attachments}
             />
