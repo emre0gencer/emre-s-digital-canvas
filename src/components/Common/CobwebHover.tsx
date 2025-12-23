@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useHoverEffect } from "@/contexts/HoverEffectContext";
 
 // A lightweight canvas overlay that spawns short-lived nodes at the mouse
 // position and draws connecting lines between nearby nodes to create a "cobweb" effect.
@@ -19,8 +20,15 @@ const CobwebHover: React.FC = () => {
   const lastMoveRef = useRef(0);
   const lastPosRef = useRef({ x: 0, y: 0 });
   const velocityRef = useRef({ vx: 0, vy: 0 });
+  const { isEnabled } = useHoverEffect();
 
   useEffect(() => {
+    if (!isEnabled) {
+      // Clear particles when disabled
+      particlesRef.current = [];
+      return;
+    }
+
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
     const resize = () => {
@@ -178,7 +186,7 @@ const CobwebHover: React.FC = () => {
       document.removeEventListener("touchmove", onTouch);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [isEnabled]);
 
   return (
     <canvas
@@ -189,6 +197,8 @@ const CobwebHover: React.FC = () => {
         pointerEvents: "none",
         zIndex: 40,
         mixBlendMode: "screen",
+        opacity: isEnabled ? 1 : 0,
+        transition: "opacity 0.3s ease",
       }}
     />
   );

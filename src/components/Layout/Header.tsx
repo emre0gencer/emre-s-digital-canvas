@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "@/components/NavLink";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { useHoverEffect } from "@/contexts/HoverEffectContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isEnabled, toggleHoverEffect } = useHoverEffect();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +42,25 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Hover Effect Toggle - Top Left */}
+          <div className="flex items-center gap-3">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/50 transition-fast">
+                  <Sparkles className={`h-4 w-4 ${isEnabled ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <Switch
+                    checked={isEnabled}
+                    onCheckedChange={toggleHoverEffect}
+                    className="data-[state=checked]:bg-primary"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isEnabled ? 'Disable' : 'Enable'} hover effect</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+
           <NavLink to="/" className="text-xl font-bold text-foreground hover:text-primary transition-fast">
             Emre Gencer
           </NavLink>
